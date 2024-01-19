@@ -18,7 +18,7 @@ class MainActivity : ComponentActivity() {
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
         val sharedPreferences = getSharedPreferences("prefs", Context.MODE_PRIVATE)
-        val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
+        val isLoggedIn = sharedPreferences.getBoolean("is_logged_in", false)
 
         setContent {
             val navController = rememberNavController()

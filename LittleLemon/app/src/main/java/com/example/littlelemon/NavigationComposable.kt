@@ -13,7 +13,7 @@ fun NavigationComposable(navController: NavHostController, isLoggedIn: Boolean) 
 
     NavHost(navController = navController, startDestination = startDestination) {
         composable(Onboarding.route) { OnboardingScreen(navController) }
-        composable(Home.route) { HomeScreen() }
-        composable(Profile.route) { ProfileScreen() }
+        composable(Home.route) { HomeScreen(navController) }
+        composable(Profile.route) { ProfileScreen(navController) }
     }
 }
