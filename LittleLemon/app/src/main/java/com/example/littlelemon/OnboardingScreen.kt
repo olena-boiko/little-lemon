@@ -1,5 +1,6 @@
 package com.example.littlelemon
 
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -26,21 +27,26 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.littlelemon.ui.theme.Green
 import com.example.littlelemon.ui.theme.Yellow
 
 @ExperimentalMaterial3Api
 @Composable
-fun OnboardingScreen() {
+fun OnboardingScreen(navController: NavHostController) {
     val firstName = remember { mutableStateOf("") }
     val lastName = remember { mutableStateOf("") }
     val email = remember { mutableStateOf("") }
+
+    val context = LocalContext.current
 
     Surface {
         Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
@@ -53,11 +59,31 @@ fun OnboardingScreen() {
             )
             InputField(label = "First Name",
                 value = firstName.value,
-                onValueChange = {})
-            InputField(label = "Last Name", value = lastName.value, onValueChange = {})
-            InputField(label = "E-mail", value = email.value, onValueChange = {})
+                onValueChange = { firstName.value = it })
+            InputField(
+                label = "Last Name",
+                value = lastName.value,
+                onValueChange = { lastName.value = it })
+            InputField(label = "E-mail", value = email.value, onValueChange = { email.value = it })
             Button(
-                onClick = {},
+                onClick = {
+                    if (isFormValid(
+                            firstName = firstName.value,
+                            lastName = lastName.value,
+                            email = email.value
+                        )
+                    ) {
+                        Toast.makeText(context, "Registration successful!", Toast.LENGTH_LONG)
+                            .show()
+                        navController.navigate(Home.route)
+                    } else {
+                        Toast.makeText(
+                            context,
+                            "Registration unsuccessful. Please enter all data.",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                },
                 colors = ButtonDefaults.buttonColors(containerColor = Yellow),
                 shape = RoundedCornerShape(4.dp),
                 border = BorderStroke(width = 1.dp, brush = SolidColor(Color.Red)),
@@ -115,9 +141,13 @@ private fun InputField(
     }
 }
 
+private fun isFormValid(firstName: String, lastName: String, email: String): Boolean {
+    return firstName.isNotBlank() && lastName.isNotBlank() && email.isNotBlank()
+}
+
 @ExperimentalMaterial3Api
 @Preview(showSystemUi = true)
 @Composable
 fun OnboardingScreenPreview() {
-    OnboardingScreen()
+    OnboardingScreen(rememberNavController())
 }
