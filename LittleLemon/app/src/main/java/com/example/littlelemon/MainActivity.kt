@@ -53,6 +53,7 @@ class MainActivity : ComponentActivity() {
                             title = it.title,
                             description = it.description,
                             price = it.price,
+                            category = it.category,
                             image = it.image
                         )
                     }
